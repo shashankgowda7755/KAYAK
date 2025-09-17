@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
 
-// To reset PWA install prompt for testing:
-// localStorage.removeItem('pwa-install-dismissed');
-// Then refresh the page
+// PWA install prompt appears when native beforeinstallprompt event fires
+// Respects user dismissal for 24 hours, then can appear again
+// To reset for immediate testing: localStorage.removeItem('pwa-install-dismissed')
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -36,12 +36,22 @@ export default function PWAInstallPrompt() {
       return;
     }
 
-    // Check if user has already dismissed the prompt (persistent across sessions or in current session)
-    const hasBeenDismissed = localStorage.getItem('pwa-install-dismissed');
-    console.log('PWA Install Prompt: hasBeenDismissed =', hasBeenDismissed, 'sessionDismissed =', sessionDismissed);
+    // Check if user has recently dismissed the prompt (within last 24 hours)
+    const dismissedTimestamp = localStorage.getItem('pwa-install-dismissed');
+    const now = Date.now();
+    const oneDayInMs = 24 * 60 * 60 * 1000; // 24 hours
     
-    if (hasBeenDismissed || sessionDismissed) {
-      console.log('PWA Install Prompt: User has dismissed, not showing');
+    let recentlyDismissed = false;
+    if (dismissedTimestamp) {
+      const dismissedTime = parseInt(dismissedTimestamp);
+      recentlyDismissed = (now - dismissedTime) < oneDayInMs;
+    }
+    
+    console.log('PWA Install Prompt: recentlyDismissed =', recentlyDismissed, 'sessionDismissed =', sessionDismissed);
+    
+    // Only block if recently dismissed (within 24 hours) or dismissed in current session
+    if (recentlyDismissed || sessionDismissed) {
+      console.log('PWA Install Prompt: Recently dismissed or session dismissed, not showing');
       return;
     }
     
@@ -50,12 +60,21 @@ export default function PWAInstallPrompt() {
       console.log('PWA Install Prompt: beforeinstallprompt event fired');
       
       // Double-check dismiss status when event fires
-       const currentDismissStatus = localStorage.getItem('pwa-install-dismissed');
-       if (currentDismissStatus || sessionDismissed) {
-         console.log('PWA Install Prompt: User has dismissed, ignoring event');
-         e.preventDefault();
-         return;
-       }
+      const currentDismissedTimestamp = localStorage.getItem('pwa-install-dismissed');
+      const currentTime = Date.now();
+      const oneDayMs = 24 * 60 * 60 * 1000;
+      
+      let currentlyRecentlyDismissed = false;
+      if (currentDismissedTimestamp) {
+        const dismissTime = parseInt(currentDismissedTimestamp);
+        currentlyRecentlyDismissed = (currentTime - dismissTime) < oneDayMs;
+      }
+      
+      if (currentlyRecentlyDismissed || sessionDismissed) {
+        console.log('PWA Install Prompt: User has recently dismissed, ignoring event');
+        e.preventDefault();
+        return;
+      }
       
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
@@ -92,11 +111,11 @@ export default function PWAInstallPrompt() {
       if (outcome === 'accepted') {
         setShowPrompt(false);
         setSessionDismissed(true);
-        localStorage.setItem('pwa-install-dismissed', 'true');
+        localStorage.setItem('pwa-install-dismissed', Date.now().toString());
       } else if (outcome === 'dismissed') {
         setShowPrompt(false);
         setSessionDismissed(true);
-        localStorage.setItem('pwa-install-dismissed', 'true');
+        localStorage.setItem('pwa-install-dismissed', Date.now().toString());
       }
       
       setDeferredPrompt(null);
@@ -111,7 +130,7 @@ export default function PWAInstallPrompt() {
     console.log('PWA Install Prompt: User dismissed the prompt');
     setShowPrompt(false);
     setSessionDismissed(true);
-    localStorage.setItem('pwa-install-dismissed', 'true');
+    localStorage.setItem('pwa-install-dismissed', Date.now().toString());
   };
 
   if (isInstalled || !showPrompt) {
