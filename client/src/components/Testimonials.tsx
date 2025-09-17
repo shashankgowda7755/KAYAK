@@ -11,9 +11,6 @@ export default function Testimonials() {
     retry: 1
   });
 
-  // Use database testimonials or empty array as fallback
-  const testimonialsData = testimonials || [];
-
   const staticTestimonials = [
     {
       id: 1,
@@ -64,6 +61,9 @@ export default function Testimonials() {
       date: "3 weeks ago"
     }
   ];
+
+  // Combine database testimonials with static testimonials as fallback
+  const testimonialsData = testimonials && testimonials.length > 0 ? testimonials : staticTestimonials;
 
   useEffect(() => {
     if (testimonialsData.length > 0) {
