@@ -4,6 +4,7 @@ import { X, Download, Smartphone } from 'lucide-react';
 // PWA install prompt appears when native beforeinstallprompt event fires
 // Respects user dismissal for 24 hours, then can appear again
 // To reset for immediate testing: localStorage.removeItem('pwa-install-dismissed')
+// To force show for testing: window.dispatchEvent(new Event('beforeinstallprompt'))
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -92,17 +93,24 @@ export default function PWAInstallPrompt() {
     
     console.log('PWA Install Prompt: Browser detection - iOS:', isIOS, 'Safari:', isSafari, 'Chrome:', isChrome, 'Edge:', isEdge);
     
-    // Only show prompt if native beforeinstallprompt event is available
-    // Remove forced fallback prompt to prevent unwanted popups
+    // Fallback: Show install prompt after 3 seconds if no native event fires
+    // This helps in development or when PWA criteria aren't fully met
+    const fallbackTimer = setTimeout(() => {
+      if (!deferredPrompt && !showPrompt && !isInstalled && !recentlyDismissed && !sessionDismissed) {
+        console.log('PWA Install Prompt: No native event fired, showing fallback prompt');
+        setShowPrompt(true);
+      }
+    }, 3000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      clearTimeout(fallbackTimer);
     };
   }, [sessionDismissed]);
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      console.log('PWA Install Prompt: User clicked install');
+      console.log('PWA Install Prompt: User clicked install with native prompt');
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       
@@ -117,6 +125,25 @@ export default function PWAInstallPrompt() {
         setSessionDismissed(true);
         localStorage.setItem('pwa-install-dismissed', Date.now().toString());
       }
+    } else {
+      console.log('PWA Install Prompt: No native prompt available, showing manual instructions');
+      // Show manual installation instructions
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const isChrome = /Chrome/.test(navigator.userAgent);
+      
+      let instructions = '';
+      if (isIOS) {
+        instructions = 'To install this app on iOS: Tap the Share button in Safari, then tap "Add to Home Screen"';
+      } else if (isChrome) {
+        instructions = 'To install this app: Click the three dots menu in Chrome, then select "Install Heaven of Munroe"';
+      } else {
+        instructions = 'To install this app: Look for an install option in your browser\'s menu or address bar';
+      }
+      
+      alert(instructions);
+      setShowPrompt(false);
+      setSessionDismissed(true);
+      localStorage.setItem('pwa-install-dismissed', Date.now().toString());
       
       setDeferredPrompt(null);
     } else {
