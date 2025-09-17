@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
 
+// To reset PWA install prompt for testing:
+// localStorage.removeItem('pwa-install-dismissed');
+// Then refresh the page
+
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
   readonly userChoice: Promise<{
@@ -14,6 +18,7 @@ export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [sessionDismissed, setSessionDismissed] = useState(false);
 
 
   useEffect(() => {
@@ -27,17 +32,15 @@ export default function PWAInstallPrompt() {
     
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
-
       console.log('PWA Install Prompt: App already installed');
       return;
     }
 
-    // Check if user has already dismissed the prompt
+    // Check if user has already dismissed the prompt (persistent across sessions or in current session)
     const hasBeenDismissed = localStorage.getItem('pwa-install-dismissed');
-    console.log('PWA Install Prompt: hasBeenDismissed =', hasBeenDismissed);
+    console.log('PWA Install Prompt: hasBeenDismissed =', hasBeenDismissed, 'sessionDismissed =', sessionDismissed);
     
-    // Check if user has already dismissed the prompt
-    if (hasBeenDismissed) {
+    if (hasBeenDismissed || sessionDismissed) {
       console.log('PWA Install Prompt: User has dismissed, not showing');
       return;
     }
@@ -45,6 +48,15 @@ export default function PWAInstallPrompt() {
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
       console.log('PWA Install Prompt: beforeinstallprompt event fired');
+      
+      // Double-check dismiss status when event fires
+       const currentDismissStatus = localStorage.getItem('pwa-install-dismissed');
+       if (currentDismissStatus || sessionDismissed) {
+         console.log('PWA Install Prompt: User has dismissed, ignoring event');
+         e.preventDefault();
+         return;
+       }
+      
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setShowPrompt(true);
@@ -67,26 +79,38 @@ export default function PWAInstallPrompt() {
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
-  }, [showPrompt, isInstalled]);
+  }, [sessionDismissed]);
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
+      console.log('PWA Install Prompt: User clicked install');
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       
+      console.log('PWA Install Prompt: User choice outcome =', outcome);
+      
       if (outcome === 'accepted') {
         setShowPrompt(false);
+        setSessionDismissed(true);
+        localStorage.setItem('pwa-install-dismissed', 'true');
+      } else if (outcome === 'dismissed') {
+        setShowPrompt(false);
+        setSessionDismissed(true);
+        localStorage.setItem('pwa-install-dismissed', 'true');
       }
       
       setDeferredPrompt(null);
     } else {
       // For iOS Safari, show instructions
       alert('To install this app on your iOS device, tap the Share button and then "Add to Home Screen".');
+      setSessionDismissed(true);
     }
   };
 
   const handleDismiss = () => {
+    console.log('PWA Install Prompt: User dismissed the prompt');
     setShowPrompt(false);
+    setSessionDismissed(true);
     localStorage.setItem('pwa-install-dismissed', 'true');
   };
 
