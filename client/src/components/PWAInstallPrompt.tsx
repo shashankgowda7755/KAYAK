@@ -14,7 +14,7 @@ export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
-  const [debugInfo, setDebugInfo] = useState('');
+
 
   useEffect(() => {
     console.log('PWA Install Prompt: Component mounted');
@@ -27,7 +27,7 @@ export default function PWAInstallPrompt() {
     
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
-      setDebugInfo('App already installed');
+
       console.log('PWA Install Prompt: App already installed');
       return;
     }
@@ -36,8 +36,11 @@ export default function PWAInstallPrompt() {
     const hasBeenDismissed = localStorage.getItem('pwa-install-dismissed');
     console.log('PWA Install Prompt: hasBeenDismissed =', hasBeenDismissed);
     
-    // For testing purposes, clear the dismissed flag and show prompt
-    localStorage.removeItem('pwa-install-dismissed');
+    // Check if user has already dismissed the prompt
+    if (hasBeenDismissed) {
+      console.log('PWA Install Prompt: User has dismissed, not showing');
+      return;
+    }
     
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -45,7 +48,7 @@ export default function PWAInstallPrompt() {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setShowPrompt(true);
-      setDebugInfo('Native install prompt available');
+
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -58,14 +61,8 @@ export default function PWAInstallPrompt() {
     
     console.log('PWA Install Prompt: Browser detection - iOS:', isIOS, 'Safari:', isSafari, 'Chrome:', isChrome, 'Edge:', isEdge);
     
-    // Show prompt for all browsers after a short delay for testing
-    setTimeout(() => {
-      if (!showPrompt && !isInstalled) {
-        console.log('PWA Install Prompt: Showing fallback prompt');
-        setShowPrompt(true);
-        setDebugInfo(`Browser: ${navigator.userAgent.substring(0, 50)}...`);
-      }
-    }, 2000); // Show after 2 seconds
+    // Only show prompt if native beforeinstallprompt event is available
+    // Remove forced fallback prompt to prevent unwanted popups
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -111,11 +108,7 @@ export default function PWAInstallPrompt() {
             <p className="text-xs text-blue-100">
               Get faster access and offline features
             </p>
-            {debugInfo && (
-              <p className="text-xs text-yellow-200 mt-1">
-                Debug: {debugInfo}
-              </p>
-            )}
+
           </div>
         </div>
         

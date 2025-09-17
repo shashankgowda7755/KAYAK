@@ -117,7 +117,7 @@ export default function PhotoGallery() {
   const defaultImages = generateLocalImages();
 
   // Combine database images with local images
-  const displayImages = [...galleryImages, ...defaultImages];
+  const displayImages = [...(Array.isArray(galleryImages) ? galleryImages : []), ...defaultImages];
 
 
   // Get unique categories for filtering
