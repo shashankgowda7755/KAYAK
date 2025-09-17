@@ -31,7 +31,7 @@ export default function BoatingPackages() {
         "Experienced local boat captain",
         "Scenic backwater exploration", 
         "Bird watching opportunities",
-        "8 to 25 people based on boat"
+        "7 people to 14 people based on boat"
       ],
       image: "/images/boathouse.jpg",
       isPopular: true,
@@ -70,14 +70,13 @@ export default function BoatingPackages() {
       packageId: "canal-boating",
       title: "Canal Boating Adventure",
       duration: "1 hour",
-      price: "₹600",
-      originalPrice: "₹800",
+      price: "₹600 - 1200",
+      originalPrice: "",
       description: "Navigate through narrow canals and hidden waterways discovering untouched natural beauty",
       features: [
         "Narrow canal exploration",
         "Hidden waterway discovery",
         "Traditional rowing boat",
-        "Wildlife spotting",
         "Local village glimpses",
         "Peaceful nature experience"
       ],
@@ -94,14 +93,13 @@ export default function BoatingPackages() {
       packageId: "kayaking-adventure",
       title: "Kayaking Adventure",
       duration: "1 hour",
-      price: "₹250",
-      originalPrice: "₹400",
+      price: "₹600 - 1500",
+      originalPrice: "",
       description: "Paddle through serene waters at your own pace, perfect for adventure enthusiasts and nature lovers",
       features: [
         "Single or double kayaks available",
         "Safety equipment provided",
         "Basic paddling instruction",
-        "Guided route through safe waters",
         "Rest stops at scenic points",
         "Photography opportunities"
       ],
@@ -118,15 +116,13 @@ export default function BoatingPackages() {
       packageId: "homestay-rooms",
       title: "Homestay Rooms",
       duration: "Per Night",
-      price: "₹1800",
-      originalPrice: "₹2200",
+      price: "₹1800 - 3000",
+      originalPrice: "",
       description: "Comfortable overnight stay in traditional Kerala homes with warm hospitality and authentic experiences",
       features: [
         "Clean, comfortable rooms",
         "Traditional Kerala architecture",
-        "Home-cooked meals included",
         "Cultural interaction with hosts",
-        "Peaceful lakeside location",
         "Wi-Fi and basic amenities"
       ],
       image: "/images/stay.jpg",
@@ -266,7 +262,7 @@ export default function BoatingPackages() {
                       <span className="text-3xl font-bold text-green-600">{pkg.price}</span>
                       {pkg.originalPrice && <span className="text-lg text-gray-400 line-through">{pkg.originalPrice}</span>}
                     </div>
-                    <p className="text-sm text-gray-500">{pkg.id === 'boat-tours' ? 'per boat' : 'per person'}</p>
+                    <p className="text-sm text-gray-500">{['boat-tours', 'homestay-rooms', 'kayaking-adventure', 'canal-boating'].includes(pkg.id) ? 'per boat' : 'per person'}</p>
                   </div>
                   
                   <div className="flex flex-col space-y-2">

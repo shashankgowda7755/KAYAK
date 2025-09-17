@@ -10,13 +10,16 @@
     "check": "tsc",
     "test": "echo \"No tests specified\" && exit 0",
     "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:generate": "drizzle-kit generate",
     "db:seed": "tsx seed.ts",
     "deploy:vercel": "vercel --prod",
     "deploy:railway": "railway up",
     "setup": "npm install && npm run db:push",
     "local": "npm run setup && npm run dev",
     "preview": "npm run build && npm run start",
-    "vercel-build": "vite build"
+    "vercel-build": "npm run db:generate && vite build",
+    "postinstall": "npm run db:generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
