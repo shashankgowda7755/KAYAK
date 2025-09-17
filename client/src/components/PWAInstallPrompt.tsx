@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Download, Smartphone } from 'lucide-react';
 
-// PWA install prompt appears when native beforeinstallprompt event fires
-// Respects user dismissal for 24 hours, then can appear again
+// PWA install prompt appears immediately when page loads (optimized for business)
+// Respects user dismissal for 1 hour only, then appears again
 // To reset for immediate testing: localStorage.removeItem('pwa-install-dismissed')
 // To force show for testing: window.dispatchEvent(new Event('beforeinstallprompt'))
 
@@ -37,24 +37,26 @@ export default function PWAInstallPrompt() {
       return;
     }
 
-    // Check if user has recently dismissed the prompt (within last 24 hours)
+    // Check if user has recently dismissed the prompt (within last 1 hour for business needs)
     const dismissedTimestamp = localStorage.getItem('pwa-install-dismissed');
     const now = Date.now();
-    const oneDayInMs = 24 * 60 * 60 * 1000; // 24 hours
+    const oneHourInMs = 60 * 60 * 1000; // 1 hour
     
     let recentlyDismissed = false;
     if (dismissedTimestamp) {
       const dismissedTime = parseInt(dismissedTimestamp);
-      recentlyDismissed = (now - dismissedTime) < oneDayInMs;
+      recentlyDismissed = (now - dismissedTime) < oneHourInMs;
     }
     
     console.log('PWA Install Prompt: recentlyDismissed =', recentlyDismissed, 'sessionDismissed =', sessionDismissed);
     
-    // Only block if recently dismissed (within 24 hours) or dismissed in current session
-    if (recentlyDismissed || sessionDismissed) {
-      console.log('PWA Install Prompt: Recently dismissed or session dismissed, not showing');
+    // Only block if recently dismissed (within 1 hour) - optimized for business needs
+    if (recentlyDismissed) {
+      console.log('PWA Install Prompt: Recently dismissed within 1 hour, not showing');
       return;
     }
+    
+    console.log('PWA Install Prompt: All conditions met, proceeding to show prompt');
     
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
@@ -63,15 +65,15 @@ export default function PWAInstallPrompt() {
       // Double-check dismiss status when event fires
       const currentDismissedTimestamp = localStorage.getItem('pwa-install-dismissed');
       const currentTime = Date.now();
-      const oneDayMs = 24 * 60 * 60 * 1000;
+      const oneHourMs = 60 * 60 * 1000; // 1 hour
       
       let currentlyRecentlyDismissed = false;
       if (currentDismissedTimestamp) {
         const dismissTime = parseInt(currentDismissedTimestamp);
-        currentlyRecentlyDismissed = (currentTime - dismissTime) < oneDayMs;
+        currentlyRecentlyDismissed = (currentTime - dismissTime) < oneHourMs;
       }
       
-      if (currentlyRecentlyDismissed || sessionDismissed) {
+      if (currentlyRecentlyDismissed) {
         console.log('PWA Install Prompt: User has recently dismissed, ignoring event');
         e.preventDefault();
         return;
@@ -93,14 +95,20 @@ export default function PWAInstallPrompt() {
     
     console.log('PWA Install Prompt: Browser detection - iOS:', isIOS, 'Safari:', isSafari, 'Chrome:', isChrome, 'Edge:', isEdge);
     
-    // Fallback: Show install prompt after 3 seconds if no native event fires
-    // This helps in development or when PWA criteria aren't fully met
+    // Show install prompt immediately if conditions are met
+    // This ensures reliable PWA installation for business needs
+    if (!isInstalled && !recentlyDismissed) {
+      console.log('PWA Install Prompt: Showing install prompt immediately');
+      setShowPrompt(true);
+    }
+    
+    // Also listen for native beforeinstallprompt event
     const fallbackTimer = setTimeout(() => {
-      if (!deferredPrompt && !showPrompt && !isInstalled && !recentlyDismissed && !sessionDismissed) {
-        console.log('PWA Install Prompt: No native event fired, showing fallback prompt');
+      if (!deferredPrompt && !showPrompt && !isInstalled && !recentlyDismissed) {
+        console.log('PWA Install Prompt: Backup timer - ensuring prompt shows');
         setShowPrompt(true);
       }
-    }, 3000);
+    }, 1000);
 
     return () => {
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
