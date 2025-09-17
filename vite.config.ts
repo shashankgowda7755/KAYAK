@@ -8,10 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [
-    react({
-      // Ensure proper React refresh
-      fastRefresh: true,
-    }),
+    react(),
   ],
   resolve: {
     alias: {
@@ -24,6 +21,13 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, "dist/public"),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+    target: 'esnext',
+    minify: 'esbuild',
   },
   server: {
     fs: {

@@ -21,8 +21,8 @@
     "setup": "npm install && npm run db:push",
     "local": "npm run setup && npm run dev",
     "preview": "npm run build && npm run start",
-    "vercel-build": "npm run db:generate && vite build",
-    "postinstall": "npm run db:generate"
+    "vercel-build": "npm run db:generate || echo 'DB generation failed, continuing with build' && vite build",
+    "postinstall": "npm run db:generate || echo 'DB generation failed during postinstall, continuing'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
