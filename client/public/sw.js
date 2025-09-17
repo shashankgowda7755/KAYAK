@@ -1,9 +1,11 @@
-const CACHE_NAME = 'heaven-of-munroe-v1';
+const CACHE_NAME = 'heaven-of-munroe-v2';
+const STATIC_CACHE = 'static-v2';
+const IMAGE_CACHE = 'images-v2';
+const API_CACHE = 'api-v2';
+
 const urlsToCache = [
   '/',
   '/inquiry',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
   '/manifest.json',
   '/icon-192x192.svg',
   '/icon-512x512.svg',
@@ -21,18 +23,68 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch event - serve from cache when offline
+// Fetch event - serve from cache when offline with improved strategies
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // Handle API requests with network-first strategy
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(API_CACHE).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Handle images with cache-first strategy
+  if (request.destination === 'image' || url.pathname.includes('/images/')) {
+    event.respondWith(
+      caches.open(IMAGE_CACHE).then(cache => {
+        return cache.match(request).then(response => {
+          if (response) {
+            return response;
+          }
+          return fetch(request).then(fetchResponse => {
+            if (fetchResponse.ok) {
+              cache.put(request, fetchResponse.clone());
+            }
+            return fetchResponse;
+          });
+        });
+      })
+    );
+    return;
+  }
+
+  // Handle other requests with cache-first strategy
   event.respondWith(
-    caches.match(event.request)
+    caches.match(request)
       .then((response) => {
-        // Return cached version or fetch from network
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+        return fetch(request).then(fetchResponse => {
+          if (fetchResponse.ok && request.method === 'GET') {
+            const responseClone = fetchResponse.clone();
+            caches.open(STATIC_CACHE).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return fetchResponse;
+        });
+      })
   );
 });
 

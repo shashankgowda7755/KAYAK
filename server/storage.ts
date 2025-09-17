@@ -39,7 +39,7 @@ export interface IStorage {
   updateTestimonial(id: string, testimonial: Partial<InsertTestimonial>): Promise<Testimonial>;
   deleteTestimonial(id: string): Promise<void>;
   
-  getGalleryImages(): Promise<GalleryImage[]>;
+  getGalleryImages(limit?: number, offset?: number): Promise<GalleryImage[]>;
   createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage>;
   updateGalleryImage(id: string, image: Partial<InsertGalleryImage>): Promise<GalleryImage>;
   deleteGalleryImage(id: string): Promise<void>;
@@ -359,8 +359,14 @@ export class MemStorage implements IStorage {
     }
   }
 
-  async getGalleryImages(): Promise<GalleryImage[]> {
-    return this.mockGalleryImages;
+  async getGalleryImages(limit?: number, offset?: number): Promise<GalleryImage[]> {
+    const activeImages = this.mockGalleryImages.filter(img => img.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
+    
+    if (limit !== undefined && offset !== undefined) {
+      return activeImages.slice(offset, offset + limit);
+    }
+    
+    return activeImages;
   }
 
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
@@ -644,15 +650,26 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Gallery Images
-  async getGalleryImages(): Promise<GalleryImage[]> {
+  async getGalleryImages(limit?: number, offset?: number): Promise<GalleryImage[]> {
     if (!db) {
       throw new Error('Database not available. Please check your database configuration.');
     }
-    return await db
+    
+    let query = db
       .select()
       .from(galleryImages)
       .where(eq(galleryImages.isActive, true))
       .orderBy(galleryImages.sortOrder);
+    
+    if (limit !== undefined) {
+      query = query.limit(limit);
+    }
+    
+    if (offset !== undefined) {
+      query = query.offset(offset);
+    }
+    
+    return await query;
   }
 
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {
@@ -937,8 +954,14 @@ class InMemoryStorage implements IStorage {
     this.testimonialsData.splice(index, 1);
   }
 
-  async getGalleryImages(): Promise<GalleryImage[]> {
-    return [...this.galleryImagesData];
+  async getGalleryImages(limit?: number, offset?: number): Promise<GalleryImage[]> {
+    const activeImages = this.galleryImagesData.filter(img => img.isActive).sort((a, b) => a.sortOrder - b.sortOrder);
+    
+    if (limit !== undefined && offset !== undefined) {
+      return activeImages.slice(offset, offset + limit);
+    }
+    
+    return activeImages;
   }
 
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {

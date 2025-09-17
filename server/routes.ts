@@ -296,11 +296,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Gallery Images
+  // Gallery Images with pagination for mobile performance
   app.get("/api/gallery-images", async (req, res) => {
     try {
-      const images = await storage.getGalleryImages();
-      res.json(images);
+      const page = parseInt(req.query.page as string) || 1;
+      const limit = parseInt(req.query.limit as string) || 20;
+      const offset = (page - 1) * limit;
+      
+      const images = await storage.getGalleryImages(limit, offset);
+      
+      // Set cache headers for better performance
+      res.set({
+        'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
+        'ETag': `"gallery-${Date.now()}"`,
+        'Content-Type': 'application/json'
+      });
+      
+      res.json({
+        images,
+        pagination: {
+          page,
+          limit,
+          hasMore: images.length === limit
+        }
+      });
     } catch (error) {
       res.status(500).json({ success: false, message: "Server error" });
     }
