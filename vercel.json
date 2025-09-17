@@ -7,7 +7,7 @@
       "use": "@vercel/node"
     },
     {
-      "src": "client/**/*",
+      "src": "dist/public/**/*",
       "use": "@vercel/static"
     }
   ],
@@ -18,15 +18,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/client/$1"
+      "dest": "/dist/public/$1"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "functions": {
-    "api/index.ts": {
-      "maxDuration": 30
-    }
-  }
+  ]
 }
