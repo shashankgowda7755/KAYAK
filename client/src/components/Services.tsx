@@ -19,7 +19,7 @@ export default function Services() {
   }> = [];
 
   return (
-    <section id="services" className="py-16 bg-gradient-to-b from-blue-50 to-green-50">
+    <section id="services" className="py-16 bg-white/70 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in-up">
           <div className="text-reveal mb-4">

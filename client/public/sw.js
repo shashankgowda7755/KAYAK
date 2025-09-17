@@ -7,9 +7,7 @@ const urlsToCache = [
   '/',
   '/inquiry',
   '/manifest.json',
-  '/icon-192x192.svg',
-  '/icon-512x512.svg',
-  '/apple-touch-icon.svg'
+  '/images/logo.png'
 ];
 
 // Install event - cache resources
@@ -124,8 +122,8 @@ function doBackgroundSync() {
 self.addEventListener('push', (event) => {
   const options = {
     body: event.data ? event.data.text() : 'New update from Heaven of Munroe!',
-    icon: '/icon-192x192.svg',
-    badge: '/icon-192x192.svg',
+    icon: '/images/logo.png',
+    badge: '/images/logo.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
@@ -135,12 +133,12 @@ self.addEventListener('push', (event) => {
       {
         action: 'explore',
         title: 'Explore',
-        icon: '/icon-192x192.svg'
+        icon: '/images/logo.png'
       },
       {
         action: 'close',
         title: 'Close',
-        icon: '/icon-192x192.svg'
+        icon: '/images/logo.png'
       }
     ]
   };

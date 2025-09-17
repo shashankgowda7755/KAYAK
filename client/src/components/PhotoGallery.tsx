@@ -184,7 +184,7 @@ export default function PhotoGallery() {
   }, [lightboxOpen, lightboxImages.length]);
 
   return (
-    <section id="gallery" className="py-16 bg-white">
+    <section id="gallery" className="py-16 bg-white/70 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-gray-800 mb-4">
@@ -216,14 +216,7 @@ export default function PhotoGallery() {
           ))}
         </div>
 
-        {/* Error State */}
-        {isError && (
-          <div className="text-center py-8">
-            <p className="text-orange-600 bg-orange-50 px-4 py-2 rounded-lg inline-block">
-              Unable to load gallery from database. Showing default images.
-            </p>
-          </div>
-        )}
+
 
         {/* Loading State */}
         {isLoading ? (

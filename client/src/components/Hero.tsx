@@ -32,19 +32,9 @@ export default function Hero() {
   const scrollHintText = heroContent?.scrollHintText || "✨ Scroll down to explore our services";
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden wave-background floating-particles">
-      {/* Enhanced background with better contrast */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-slate-800/85 to-teal-900/90"></div>
-      <div 
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url("${backgroundImage}")`,
-          filter: 'brightness(0.7) contrast(1.2)',
-        }}
-      ></div>
-      
-      {/* Animated overlay for better text contrast */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-slate-900/50"></div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden floating-particles">
+      {/* Light overlay for text readability while keeping background visible */}
+      <div className="absolute inset-0 bg-black/20"></div>
       
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="animate-fade-in-up">

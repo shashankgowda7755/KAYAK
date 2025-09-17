@@ -105,7 +105,7 @@ export default function Testimonials() {
   // Loading state
   if (isLoading) {
     return (
-      <section className="py-20 bg-gradient-to-b from-slate-50 via-blue-50 to-green-50 relative overflow-hidden">
+      <section className="py-20 bg-white/70 backdrop-blur-sm relative overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center">
             <div className="animate-pulse">
@@ -135,7 +135,7 @@ export default function Testimonials() {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-slate-50 via-blue-50 to-green-50 relative overflow-hidden">
+    <section className="py-20 bg-white/70 backdrop-blur-sm relative overflow-hidden">
       {/* Background decorations */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute top-20 left-10 w-32 h-32 bg-blue-400 rounded-full blur-3xl animate-float"></div>

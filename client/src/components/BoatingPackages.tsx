@@ -22,7 +22,7 @@ export default function BoatingPackages() {
       id: "boat-tours",
       packageId: "boat-tours",
       title: "Traditional Boat Tours",
-      duration: "1 hour",
+      duration: "",
       price: "₹1200",
       originalPrice: "₹1500",
       description: "Authentic Kerala boathouse experience through pristine backwaters with expert local guides",
@@ -38,6 +38,30 @@ export default function BoatingPackages() {
       isPopular: true,
       whatsappLink: "https://api.whatsapp.com/send?phone=919633836839&text=Hi! I want to book Traditional Boat Tours package",
       sortOrder: 1,
+      isActive: true,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: "lake-foods",
+      packageId: "lake-foods",
+      title: "Lake Foods Experience",
+      duration: "",
+      price: "₹600",
+      originalPrice: "₹800",
+      description: "Savor authentic Kerala cuisine freshly prepared on the lake with traditional cooking methods",
+      features: [
+        "Freshly prepared Kerala meals",
+        "Traditional cooking demonstration",
+        "Local spices and ingredients",
+        "Waterfront dining experience",
+        "Cultural food stories",
+        "Vegetarian and non-veg options"
+      ],
+      image: "/images/food.jpg",
+      isPopular: true,
+      whatsappLink: "https://api.whatsapp.com/send?phone=919633836839&text=Hi! I want to book Lake Foods Experience package",
+      sortOrder: 3,
       isActive: true,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -146,7 +170,7 @@ export default function BoatingPackages() {
   // If loading, show loading state
   if (isLoading) {
     return (
-      <section id="packages" className="py-16 bg-gradient-to-b from-green-50 to-blue-50">
+      <section id="packages" className="py-16 bg-white/70 backdrop-blur-sm">
         <div className="container mx-auto px-4">
           <div className="text-center">
             <div className="animate-pulse">
@@ -176,7 +200,7 @@ export default function BoatingPackages() {
 
 
   return (
-    <section id="packages" className="py-16 bg-gradient-to-b from-green-50 to-blue-50">
+    <section id="packages" className="py-16 bg-white/70 backdrop-blur-sm">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12 animate-fade-in-up">
           <h2 className="font-serif text-3xl md:text-4xl font-bold text-gray-800 mb-4 gradient-text">
@@ -232,10 +256,12 @@ export default function BoatingPackages() {
                   <div className="absolute inset-0 bg-blue-500/0 group-hover:bg-blue-500/10 transition-all duration-700"></div>
                   
                   <div className="absolute bottom-4 left-4 text-white">
-                    <div className="flex items-center space-x-2 mb-2">
-                      <i className="fas fa-clock text-blue-300"></i>
-                      <span className="text-sm font-medium">{pkg.duration}</span>
-                    </div>
+                    {pkg.duration && (
+                      <div className="flex items-center space-x-2 mb-2">
+                        <i className="fas fa-clock text-blue-300"></i>
+                        <span className="text-sm font-medium">{pkg.duration}</span>
+                      </div>
+                    )}
                     <h3 className="font-serif text-2xl font-bold">{pkg.title}</h3>
                   </div>
                 </div>

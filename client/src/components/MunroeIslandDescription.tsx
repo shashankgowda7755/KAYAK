@@ -17,7 +17,7 @@ export default function MunroeIslandDescription() {
   const subtitle = mainContent?.content || "A cluster of eight pristine islands where the Kallada River meets Ashtamudi Lake — Kerala's hidden gem";
   const heroImage = mainContent?.imageUrl || "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
   return (
-    <section className="py-20 bg-gradient-to-br from-blue-50 via-white to-teal-50" data-testid="section-munroe-description">
+    <section className="py-20 bg-white/80 backdrop-blur-sm" data-testid="section-munroe-description">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">

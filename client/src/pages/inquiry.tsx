@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import InquiryForm from "../components/InquiryForm";
-import Header from "../components/Header";
+import SimpleHeader from "../components/SimpleHeader";
 import Footer from "../components/Footer";
 
 export default function InquiryPage() {
@@ -29,7 +29,7 @@ export default function InquiryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
-      <Header />
+      <SimpleHeader />
       
       {/* Hero Section for Booking */}
       <section className="bg-blue-600 text-white py-12">

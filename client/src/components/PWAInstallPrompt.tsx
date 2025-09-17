@@ -152,13 +152,9 @@ export default function PWAInstallPrompt() {
       setShowPrompt(false);
       setSessionDismissed(true);
       localStorage.setItem('pwa-install-dismissed', Date.now().toString());
-      
-      setDeferredPrompt(null);
-    } else {
-      // For iOS Safari, show instructions
-      alert('To install this app on your iOS device, tap the Share button and then "Add to Home Screen".');
-      setSessionDismissed(true);
     }
+    
+    setDeferredPrompt(null);
   };
 
   const handleDismiss = () => {

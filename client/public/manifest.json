@@ -12,21 +12,21 @@
   "categories": ["travel", "tourism", "recreation"],
   "icons": [
     {
-      "src": "/icon-192x192.svg",
+      "src": "/images/logo.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "/icon-512x512.svg",
+      "src": "/images/logo.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable any"
     },
     {
-      "src": "/apple-touch-icon.svg",
+      "src": "/images/logo.png",
       "sizes": "180x180",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
   ],
 
@@ -38,7 +38,7 @@
       "url": "/inquiry",
       "icons": [
         {
-          "src": "/icon-192x192.svg",
+          "src": "/images/logo.png",
           "sizes": "192x192"
         }
       ]
@@ -50,7 +50,7 @@
       "url": "/#gallery",
       "icons": [
         {
-          "src": "/icon-192x192.svg",
+          "src": "/images/logo.png",
           "sizes": "192x192"
         }
       ]
@@ -62,7 +62,7 @@
       "url": "/#contact",
       "icons": [
         {
-          "src": "/icon-192x192.svg",
+          "src": "/images/logo.svg",
           "sizes": "192x192"
         }
       ]

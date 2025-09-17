@@ -285,7 +285,7 @@ export default function AboutUs() {
   };
 
   return (
-    <section id="about-us" className="py-20 bg-gradient-to-br from-slate-50 via-white to-blue-50" data-testid="section-about-us">
+    <section id="about-us" className="py-20 bg-white/70 backdrop-blur-sm" data-testid="section-about-us">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="font-serif text-4xl md:text-5xl font-bold text-foreground mb-6" data-testid="heading-about-us">

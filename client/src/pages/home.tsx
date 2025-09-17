@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import SimpleHeader from "../components/SimpleHeader";
 import Hero from "../components/Hero";
 import MunroeIslandDescription from "../components/MunroeIslandDescription";
 import AboutUs from "../components/AboutUs";
@@ -12,8 +12,17 @@ import BottomNavigation from "../components/BottomNavigation";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <div 
+      className="min-h-screen bg-gray-50" 
+      style={{
+        backgroundImage: 'url(/images/homebg.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'top',
+        backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <SimpleHeader />
       <Hero />
       <MunroeIslandDescription />
       <Services />
