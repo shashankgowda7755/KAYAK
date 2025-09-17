@@ -21,18 +21,17 @@ export default function BoatingPackages() {
     {
       id: "boat-tours",
       packageId: "boat-tours",
-      title: "Traditional Boat Tours",
+      title: "Shikara boat tours",
       duration: "",
-      price: "₹1200",
-      originalPrice: "₹1500",
-      description: "Authentic Kerala boathouse experience through pristine backwaters with expert local guides",
+      price: "₹1200 - 3000",
+      originalPrice: "",
+      description: "Authentic Kerala boathouse experience through pristine backwaters with expert local guides astamidi river",
       features: [
         "Traditional Kerala boathouse ride",
         "Experienced local boat captain",
         "Scenic backwater exploration", 
         "Bird watching opportunities",
-        "Photography assistance",
-        "Traditional refreshments"
+        "8 to 25 people based on boat"
       ],
       image: "/images/boathouse.jpg",
       isPopular: true,
@@ -86,30 +85,6 @@ export default function BoatingPackages() {
       isPopular: false,
       whatsappLink: "https://api.whatsapp.com/send?phone=919633836839&text=Hi! I want to book Canal Boating Adventure package",
       sortOrder: 2,
-      isActive: true,
-      createdAt: new Date(),
-      updatedAt: new Date()
-    },
-    {
-      id: "lake-foods",
-      packageId: "lake-foods",
-      title: "Lake Foods Experience",
-      duration: "4 Hours",
-      price: "₹1100",
-      originalPrice: "₹1400",
-      description: "Savor authentic Kerala cuisine freshly prepared on the lake with traditional cooking methods",
-      features: [
-        "Freshly prepared Kerala meals",
-        "Traditional cooking demonstration",
-        "Local spices and ingredients",
-        "Waterfront dining experience",
-        "Cultural food stories",
-        "Vegetarian and non-veg options"
-      ],
-      image: "/images/food.jpg",
-      isPopular: true,
-      whatsappLink: "https://api.whatsapp.com/send?phone=919633836839&text=Hi! I want to book Lake Foods Experience package",
-      sortOrder: 3,
       isActive: true,
       createdAt: new Date(),
       updatedAt: new Date()
@@ -289,9 +264,9 @@ export default function BoatingPackages() {
                   <div>
                     <div className="flex items-center space-x-2">
                       <span className="text-3xl font-bold text-green-600">{pkg.price}</span>
-                      <span className="text-lg text-gray-400 line-through">{pkg.originalPrice}</span>
+                      {pkg.originalPrice && <span className="text-lg text-gray-400 line-through">{pkg.originalPrice}</span>}
                     </div>
-                    <p className="text-sm text-gray-500">per person</p>
+                    <p className="text-sm text-gray-500">{pkg.id === 'boat-tours' ? 'per boat' : 'per person'}</p>
                   </div>
                   
                   <div className="flex flex-col space-y-2">

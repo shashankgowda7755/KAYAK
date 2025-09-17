@@ -1,9 +1,9 @@
 import React from "react";
 import { Router, Switch, Route } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Home from "@/pages/Home.tsx";
-import Inquiry from "@/pages/inquiry.tsx";
-import NotFound from "@/pages/not-found.tsx";
+import Home from "@/pages/Home";
+import Inquiry from "@/pages/inquiry";
+import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
