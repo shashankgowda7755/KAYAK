@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import { Users, MapPin, Award, Heart, Clock, Anchor, Globe, Star } from "lucide-react";
 import type { AboutContent, ContentSection } from "@shared/schema";
 
@@ -9,20 +10,24 @@ export default function AboutUs() {
   // Fetch about content from database
   const { data: aboutContent, isLoading } = useQuery<AboutContent | null>({
     queryKey: ['/api/about-content'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: 1
   });
   
   // Fetch additional content sections for comprehensive about us
   const { data: storyContent } = useQuery<ContentSection | null>({
     queryKey: ['/api/content-sections', 'about-story'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
   
   const { data: locationContent } = useQuery<ContentSection | null>({
     queryKey: ['/api/content-sections', 'about-location'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
   
   const { data: missionContent } = useQuery<ContentSection | null>({
     queryKey: ['/api/content-sections', 'about-mission'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   const renderTabContent = () => {

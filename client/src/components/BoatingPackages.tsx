@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import type { BoatingPackage } from "@shared/schema";
 
 export default function BoatingPackages() {
@@ -10,6 +11,7 @@ export default function BoatingPackages() {
   // Fetch boating packages from database
   const { data: packages, isLoading } = useQuery<BoatingPackage[]>({
     queryKey: ['/api/boating-packages'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: 1
   });
 
@@ -46,8 +48,8 @@ export default function BoatingPackages() {
       packageId: "lake-foods",
       title: "Lake Foods Experience",
       duration: "",
-      price: "₹600",
-      originalPrice: "₹800",
+      price: "₹600 - 1500",
+      originalPrice: "",
       description: "Savor authentic Kerala cuisine freshly prepared on the lake with traditional cooking methods",
       features: [
         "Freshly prepared Kerala meals",
@@ -93,7 +95,7 @@ export default function BoatingPackages() {
       packageId: "kayaking-adventure",
       title: "Kayaking Adventure",
       duration: "1 hour",
-      price: "₹600 - 1500",
+      price: "₹250",
       originalPrice: "",
       description: "Paddle through serene waters at your own pace, perfect for adventure enthusiasts and nature lovers",
       features: [
@@ -262,7 +264,7 @@ export default function BoatingPackages() {
                       <span className="text-3xl font-bold text-green-600">{pkg.price}</span>
                       {pkg.originalPrice && <span className="text-lg text-gray-400 line-through">{pkg.originalPrice}</span>}
                     </div>
-                    <p className="text-sm text-gray-500">{['boat-tours', 'homestay-rooms', 'kayaking-adventure', 'canal-boating'].includes(pkg.id) ? 'per boat' : 'per person'}</p>
+                    <p className="text-sm text-gray-500">per person</p>
                   </div>
                   
                   <div className="flex flex-col space-y-2">

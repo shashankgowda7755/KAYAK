@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import type { Testimonial } from "@shared/schema";
 
 export default function Testimonials() {
@@ -8,6 +9,7 @@ export default function Testimonials() {
   // Fetch testimonials from database
   const { data: testimonials, isLoading } = useQuery<Testimonial[]>({
     queryKey: ['/api/testimonials'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: 1
   });
 
@@ -18,7 +20,7 @@ export default function Testimonials() {
       platform: "Google Maps",
       rating: 5,
       review: "Absolutely magical experience! The sunrise boat tour was breathtaking. The traditional breakfast on the boat was delicious and the hospitality was exceptional. Highly recommended!",
-      date: "2 weeks ago"
+      reviewDate: "2 weeks ago"
     },
     {
       id: 2,
@@ -26,7 +28,7 @@ export default function Testimonials() {
       platform: "TripAdvisor",
       rating: 5,
       review: "Best boating experience in Kerala! The family adventure package was perfect for our group. Kids loved the fishing experience and the traditional lunch was amazing.",
-      date: "1 month ago"
+      reviewDate: "1 month ago"
     },
     {
       id: 3,
@@ -34,7 +36,7 @@ export default function Testimonials() {
       platform: "Google Reviews",
       rating: 5,
       review: "The romantic sunset cruise exceeded all expectations! The candlelight dinner on the boat was incredibly romantic. Perfect for our anniversary celebration.",
-      date: "3 weeks ago"
+      reviewDate: "3 weeks ago"
     },
     {
       id: 4,
@@ -42,7 +44,7 @@ export default function Testimonials() {
       platform: "TripAdvisor",
       rating: 5,
       review: "Authentic Kerala experience! The homestay was comfortable and the hosts were incredibly welcoming. The traditional food was the highlight of our trip.",
-      date: "2 months ago"
+      reviewDate: "2 months ago"
     },
     {
       id: 5,
@@ -50,7 +52,7 @@ export default function Testimonials() {
       platform: "Google Maps",
       rating: 5,
       review: "Heaven of Munroe truly lives up to its name! The full-day explorer package was incredible. Every moment was well-planned and the guides were knowledgeable.",
-      date: "1 week ago"
+      reviewDate: "1 week ago"
     },
     {
       id: 6,
@@ -58,7 +60,7 @@ export default function Testimonials() {
       platform: "TripAdvisor",
       rating: 5,
       review: "Outstanding service and unforgettable memories! The canal boating through the backwaters was peaceful and rejuvenating. Will definitely return!",
-      date: "3 weeks ago"
+      reviewDate: "3 weeks ago"
     }
   ];
 

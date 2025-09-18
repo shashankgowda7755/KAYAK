@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import { Plus, Upload, X, Edit, Trash2 } from "lucide-react";
 import type { GalleryImage } from "@shared/schema";
 
@@ -29,6 +30,7 @@ export default function AdminGallery() {
   // Fetch gallery images
   const { data: galleryImages = [], isLoading } = useQuery<GalleryImage[]>({
     queryKey: ['/api/gallery-images'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   // Add new image mutation

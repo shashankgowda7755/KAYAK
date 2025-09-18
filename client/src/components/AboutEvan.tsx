@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import type { AboutContent } from "@shared/schema";
 
 export default function AboutEvan() {
@@ -8,6 +9,7 @@ export default function AboutEvan() {
   // Fetch about content from database
   const { data: aboutContent, isLoading } = useQuery<AboutContent | null>({
     queryKey: ['/api/about-content'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: 1
   });
 

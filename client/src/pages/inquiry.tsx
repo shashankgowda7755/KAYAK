@@ -47,7 +47,7 @@ export default function InquiryPage() {
         <InquiryForm 
           selectedPackage={selectedPackage}
           onSuccess={(inquiryId) => {
-            console.log("Inquiry submitted with ID:", inquiryId);
+            // Inquiry submitted successfully
           }}
         />
       </main>

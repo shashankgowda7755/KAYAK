@@ -655,21 +655,21 @@ export class DatabaseStorage implements IStorage {
       throw new Error('Database not available. Please check your database configuration.');
     }
     
-    let query = db
+    const baseQuery = db
       .select()
       .from(galleryImages)
       .where(eq(galleryImages.isActive, true))
       .orderBy(galleryImages.sortOrder);
     
-    if (limit !== undefined) {
-      query = query.limit(limit);
+    if (limit !== undefined && offset !== undefined) {
+      return await baseQuery.limit(limit).offset(offset);
+    } else if (limit !== undefined) {
+      return await baseQuery.limit(limit);
+    } else if (offset !== undefined) {
+      return await baseQuery.offset(offset);
     }
     
-    if (offset !== undefined) {
-      query = query.offset(offset);
-    }
-    
-    return await query;
+    return await baseQuery;
   }
 
   async createGalleryImage(image: InsertGalleryImage): Promise<GalleryImage> {

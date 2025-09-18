@@ -1,15 +1,18 @@
 import { Leaf, Home, Ship, CheckCircle, Droplet } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import type { ContentSection } from "@shared/schema";
 
 export default function MunroeIslandDescription() {
   // Fetch content sections from database
   const { data: mainContent } = useQuery<ContentSection | null>({
     queryKey: ['/api/content-sections', 'munroe-island-main'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
   
   const { data: featuresContent } = useQuery<ContentSection | null>({
     queryKey: ['/api/content-sections', 'munroe-island-features'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   // Use database content with fallbacks

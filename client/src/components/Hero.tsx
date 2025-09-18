@@ -1,5 +1,6 @@
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import type { HeroContent } from "@shared/schema";
 
 export default function Hero() {
@@ -8,6 +9,7 @@ export default function Hero() {
   // Fetch hero content from database
   const { data: heroContent, isLoading } = useQuery<HeroContent | null>({
     queryKey: ['/api/hero-content'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
     retry: 1
   });
 

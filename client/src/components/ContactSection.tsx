@@ -96,7 +96,7 @@ export default function ContactSection() {
                   <i className="fas fa-plane mt-1"></i>
                   <div>
                     <h5 className="font-semibold mb-1">By Air</h5>
-                    <p className="text-sm opacity-90">Trivandrum Airport (90 km) - We provide pickup service (₹2,500). Cochin Airport (160 km) also available.</p>
+                    <p className="text-sm opacity-90">Trivandrum Airport (90 km). Cochin Airport (160 km) also available.</p>
                   </div>
                 </div>
                 
@@ -104,7 +104,7 @@ export default function ContactSection() {
                   <i className="fas fa-train mt-1"></i>
                   <div>
                     <h5 className="font-semibold mb-1">By Train</h5>
-                    <p className="text-sm opacity-90">Kollam Railway Station (25 km) - Direct connections from major cities. Free pickup for 3+ night stays.</p>
+                    <p className="text-sm opacity-90">Kollam Railway Station (25 km) - Direct connections from major cities.</p>
                   </div>
                 </div>
                 
@@ -112,7 +112,7 @@ export default function ContactSection() {
                   <i className="fas fa-car mt-1"></i>
                   <div>
                     <h5 className="font-semibold mb-1">By Road</h5>
-                    <p className="text-sm opacity-90">Well-connected by NH66. GPS coordinates: 8.8932° N, 76.7794° E. Parking available on-site.</p>
+                    <p className="text-sm opacity-90">Well-connected by NH66. Parking available on-site.</p>
                   </div>
                 </div>
               </div>

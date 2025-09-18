@@ -1,17 +1,17 @@
 import React from "react";
 import { Router, Switch, Route } from "wouter";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Home from "@/pages/Home";
-import Inquiry from "@/pages/inquiry";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import Home from "@/pages/home";
+import InquiryPage from "@/pages/inquiry";
 import NotFound from "@/pages/not-found";
-
-const queryClient = new QueryClient();
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 function AppRouter() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/inquiry" component={Inquiry} />
+      <Route path="/inquiry" component={InquiryPage} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -19,11 +19,13 @@ function AppRouter() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Router>
-        <AppRouter />
-      </Router>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Router>
+          <AppRouter />
+        </Router>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

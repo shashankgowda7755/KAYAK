@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { getQueryFn } from "@/lib/queryClient";
 import { Images, ChevronUp, X, ChevronLeft, ChevronRight } from "lucide-react";
 import type { GalleryImage } from "@shared/schema";
 
@@ -12,6 +13,7 @@ export default function PhotoGallery() {
 
   const { data: galleryImages = [], isLoading, isError } = useQuery<GalleryImage[]>({
     queryKey: ['/api/gallery-images'],
+    queryFn: getQueryFn({ on401: "returnNull" }),
   });
 
   // Generate gallery images from all photos in the pics folder

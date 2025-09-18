@@ -23,17 +23,12 @@ export default function PWAInstallPrompt() {
 
 
   useEffect(() => {
-    console.log('PWA Install Prompt: Component mounted');
-    
     // Check if app is already installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
     
-    console.log('PWA Install Prompt: isStandalone =', isStandalone, 'isInWebAppiOS =', isInWebAppiOS);
-    
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
-      console.log('PWA Install Prompt: App already installed');
       return;
     }
 
@@ -48,19 +43,13 @@ export default function PWAInstallPrompt() {
       recentlyDismissed = (now - dismissedTime) < oneHourInMs;
     }
     
-    console.log('PWA Install Prompt: recentlyDismissed =', recentlyDismissed, 'sessionDismissed =', sessionDismissed);
-    
     // Only block if recently dismissed (within 1 hour) - optimized for business needs
     if (recentlyDismissed) {
-      console.log('PWA Install Prompt: Recently dismissed within 1 hour, not showing');
       return;
     }
     
-    console.log('PWA Install Prompt: All conditions met, proceeding to show prompt');
-    
     // Listen for the beforeinstallprompt event
     const handleBeforeInstallPrompt = (e: Event) => {
-      console.log('PWA Install Prompt: beforeinstallprompt event fired');
       
       // Double-check dismiss status when event fires
       const currentDismissedTimestamp = localStorage.getItem('pwa-install-dismissed');
@@ -74,7 +63,6 @@ export default function PWAInstallPrompt() {
       }
       
       if (currentlyRecentlyDismissed) {
-        console.log('PWA Install Prompt: User has recently dismissed, ignoring event');
         e.preventDefault();
         return;
       }
@@ -93,19 +81,15 @@ export default function PWAInstallPrompt() {
     const isChrome = /Chrome/.test(navigator.userAgent);
     const isEdge = /Edg/.test(navigator.userAgent);
     
-    console.log('PWA Install Prompt: Browser detection - iOS:', isIOS, 'Safari:', isSafari, 'Chrome:', isChrome, 'Edge:', isEdge);
-    
     // Show install prompt immediately if conditions are met
     // This ensures reliable PWA installation for business needs
     if (!isInstalled && !recentlyDismissed) {
-      console.log('PWA Install Prompt: Showing install prompt immediately');
       setShowPrompt(true);
     }
     
     // Also listen for native beforeinstallprompt event
     const fallbackTimer = setTimeout(() => {
       if (!deferredPrompt && !showPrompt && !isInstalled && !recentlyDismissed) {
-        console.log('PWA Install Prompt: Backup timer - ensuring prompt shows');
         setShowPrompt(true);
       }
     }, 1000);
@@ -118,11 +102,8 @@ export default function PWAInstallPrompt() {
 
   const handleInstallClick = async () => {
     if (deferredPrompt) {
-      console.log('PWA Install Prompt: User clicked install with native prompt');
       deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
-      
-      console.log('PWA Install Prompt: User choice outcome =', outcome);
       
       if (outcome === 'accepted') {
         setShowPrompt(false);
@@ -134,7 +115,6 @@ export default function PWAInstallPrompt() {
         localStorage.setItem('pwa-install-dismissed', Date.now().toString());
       }
     } else {
-      console.log('PWA Install Prompt: No native prompt available, showing manual instructions');
       // Show manual installation instructions
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
       const isChrome = /Chrome/.test(navigator.userAgent);
@@ -158,7 +138,6 @@ export default function PWAInstallPrompt() {
   };
 
   const handleDismiss = () => {
-    console.log('PWA Install Prompt: User dismissed the prompt');
     setShowPrompt(false);
     setSessionDismissed(true);
     localStorage.setItem('pwa-install-dismissed', Date.now().toString());
